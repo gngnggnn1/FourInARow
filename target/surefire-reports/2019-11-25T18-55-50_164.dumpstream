@@ -1,0 +1,45 @@
+# Created at 2019-11-25T18:55:50.166
+java.io.FileNotFoundException: C:\Users\��??�o??\Desktop\Four-in-a-Row-start-master\target\jacoco (ϵͳ�Ҳ���ָ����·����)
+
+# Created at 2019-11-25T18:55:50.173
+	at java.base/java.io.FileOutputStream.open0(Native Method)
+
+# Created at 2019-11-25T18:55:50.180
+	at java.base/java.io.FileOutputStream.open(FileOutputStream.java:298)
+
+# Created at 2019-11-25T18:55:50.187
+	at java.base/java.io.FileOutputStream.<init>(FileOutputStream.java:237)
+
+# Created at 2019-11-25T18:55:50.195
+	at org.jacoco.agent.rt.internal_28bab1d.output.FileOutput.openFile(FileOutput.java:67)
+
+# Created at 2019-11-25T18:55:50.203
+	at org.jacoco.agent.rt.internal_28bab1d.output.FileOutput.startup(FileOutput.java:49)
+
+# Created at 2019-11-25T18:55:50.213
+	at org.jacoco.agent.rt.internal_28bab1d.Agent.startup(Agent.java:122)
+
+# Created at 2019-11-25T18:55:50.219
+	at org.jacoco.agent.rt.internal_28bab1d.Agent.getInstance(Agent.java:50)
+
+# Created at 2019-11-25T18:55:50.224
+	at org.jacoco.agent.rt.internal_28bab1d.PreMain.premain(PreMain.java:45)
+
+# Created at 2019-11-25T18:55:50.229
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+
+# Created at 2019-11-25T18:55:50.234
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+
+# Created at 2019-11-25T18:55:50.241
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+
+# Created at 2019-11-25T18:55:50.248
+	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+
+# Created at 2019-11-25T18:55:50.254
+	at java.instrument/sun.instrument.InstrumentationImpl.loadClassAndStartAgent(InstrumentationImpl.java:513)
+
+# Created at 2019-11-25T18:55:50.259
+	at java.instrument/sun.instrument.InstrumentationImpl.loadClassAndCallPremain(InstrumentationImpl.java:525)
+

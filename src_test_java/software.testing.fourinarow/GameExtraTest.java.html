@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>GameExtraTest.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">GameExtraTest (2019年11月26日 下午7:14:14)</a> &gt; <a href="../../index.html" class="el_group">Four-in-a-Row-start-master</a> &gt; <a href="../index.html" class="el_bundle">src/test/java</a> &gt; <a href="index.source.html" class="el_package">software.testing.fourinarow</a> &gt; <span class="el_source">GameExtraTest.java</span></div><h1>GameExtraTest.java</h1><pre class="source lang-java linenums">package software.testing.fourinarow;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+
+<span class="fc" id="L10">public class GameExtraTest {</span>
+<span class="fc" id="L11">	Game game = new Game();</span>
+	
+	@Test
+	public void testGetCellStatus() throws FourInARowException {
+<span class="fc" id="L15">		game.resetGame();</span>
+<span class="fc" id="L16">		game.takeTurn(0);</span>
+<span class="fc" id="L17">		assertEquals(CellStatus.PLAYER_ONE, game.getCellStatus(0, 0));</span>
+<span class="fc" id="L18">	}</span>
+	
+	@Test
+	public void testGetCellStatusNegativeRow() {
+<span class="fc" id="L22">		FourInARowException exception = assertThrows(FourInARowException.class, () -&gt; {</span>
+<span class="fc" id="L23">			game.resetGame();</span>
+<span class="nc" id="L24">			game.getCellStatus(0, -1);</span>
+<span class="nc" id="L25">		});</span>
+<span class="fc" id="L26">	}</span>
+	
+	@Test
+	public void testGetCellStatusGreatRow() {
+<span class="fc" id="L30">		FourInARowException exception = assertThrows(FourInARowException.class, () -&gt; {</span>
+<span class="fc" id="L31">			game.resetGame();</span>
+<span class="nc" id="L32">			game.getCellStatus(0, 6);</span>
+<span class="nc" id="L33">		});</span>
+<span class="fc" id="L34">	}</span>
+	
+	@Test
+	public void testGetCellStatusNegativeColumn() {
+<span class="fc" id="L38">		FourInARowException exception = assertThrows(FourInARowException.class, () -&gt; {</span>
+<span class="fc" id="L39">			game.resetGame();</span>
+<span class="nc" id="L40">			game.getCellStatus(-1, 0);</span>
+<span class="nc" id="L41">		});</span>
+<span class="fc" id="L42">	}</span>
+	
+	@Test
+	public void testGetCellStatusGreatColunm() {
+<span class="fc" id="L46">		FourInARowException exception = assertThrows(FourInARowException.class, () -&gt; {</span>
+<span class="fc" id="L47">			game.resetGame();</span>
+<span class="nc" id="L48">			game.getCellStatus(7, 0);</span>
+<span class="nc" id="L49">		});</span>
+<span class="fc" id="L50">	}</span>
+	
+	@Test
+	public void testResetGame() throws FourInARowException {
+<span class="fc" id="L54">		game.resetGame();</span>
+<span class="fc" id="L55">		boolean check = true;</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">		for(int i = 0; i &lt; Game.MAXIMUM_COLUMNS; i++) {</span>
+<span class="fc bfc" id="L57" title="All 2 branches covered.">    		for(int j = 0; j &lt; Game.MAXIMUM_ROWS; j++) {</span>
+<span class="pc bpc" id="L58" title="1 of 2 branches missed.">    			if(game.getCellStatus(i, j) != CellStatus.EMPTY) {</span>
+<span class="nc" id="L59">    				check = false;</span>
+    			}
+    		}
+    	}
+<span class="fc" id="L63">		assertTrue(check);</span>
+<span class="fc" id="L64">	}</span>
+	
+	@Test
+	public void testGetActivePlayer2() throws FourInARowException {
+<span class="fc" id="L68">		game.resetGame();</span>
+<span class="fc" id="L69">		game.takeTurn(0);</span>
+<span class="fc" id="L70">		assertEquals(Player.TWO, game.getActivePlayer());</span>
+<span class="fc" id="L71">	}</span>
+	
+	@Test
+	public void testGetActivePlayer1() throws FourInARowException {
+<span class="fc" id="L75">		game.resetGame();</span>
+<span class="fc" id="L76">		game.takeTurn(0);</span>
+<span class="fc" id="L77">		game.takeTurn(0);</span>
+<span class="fc" id="L78">		assertEquals(Player.ONE, game.getActivePlayer());</span>
+<span class="fc" id="L79">	}</span>
+	
+	@Test
+	public void testGetLastActivePlayer1() throws FourInARowException {
+<span class="fc" id="L83">		game.resetGame();</span>
+<span class="fc" id="L84">		game.takeTurn(0);</span>
+<span class="fc" id="L85">		assertEquals(Player.ONE, game.getLastActivePlayer());</span>
+<span class="fc" id="L86">	}</span>
+	
+	@Test
+	public void testGetLastActivePlayer2() throws FourInARowException {
+<span class="fc" id="L90">		game.resetGame();</span>
+<span class="fc" id="L91">		game.takeTurn(0);</span>
+<span class="fc" id="L92">		game.takeTurn(0);</span>
+<span class="fc" id="L93">		assertEquals(Player.TWO, game.getLastActivePlayer());</span>
+<span class="fc" id="L94">	}</span>
+	
+	@Test
+	public void testTakeTurn() throws FourInARowException {
+<span class="fc" id="L98">		game.resetGame();</span>
+<span class="fc" id="L99">		game.takeTurn(0);</span>
+<span class="fc" id="L100">		assertEquals(CellStatus.PLAYER_ONE, game.getCellStatus(0, 0));</span>
+<span class="fc" id="L101">		game.takeTurn(1);</span>
+<span class="fc" id="L102">		assertEquals(CellStatus.PLAYER_TWO, game.getCellStatus(1, 0)); </span>
+<span class="fc" id="L103">	}</span>
+	
+	@Test
+	public void testTakeTurnMax() throws FourInARowException {
+<span class="fc" id="L107">		game.resetGame();</span>
+<span class="fc" id="L108">		game.takeTurn(0);</span>
+<span class="fc" id="L109">		game.takeTurn(0);</span>
+<span class="fc" id="L110">		game.takeTurn(0);</span>
+<span class="fc" id="L111">		game.takeTurn(0);</span>
+<span class="fc" id="L112">		game.takeTurn(0);</span>
+<span class="fc" id="L113">		game.takeTurn(0);</span>
+<span class="fc" id="L114">		assertFalse(game.takeTurn(0));</span>
+<span class="fc" id="L115">	}</span>
+	
+	@Test
+	public void testUndo() throws FourInARowException {
+<span class="fc" id="L119">		game.resetGame();</span>
+<span class="fc" id="L120">		game.takeTurn(0);</span>
+<span class="fc" id="L121">		game.takeTurn(0);</span>
+<span class="fc" id="L122">		game.takeTurn(0);</span>
+<span class="fc" id="L123">		game.undo();</span>
+<span class="fc" id="L124">		assertEquals(CellStatus.EMPTY, game.getCellStatus(0, 2));</span>
+<span class="fc" id="L125">		game.undo();</span>
+<span class="fc" id="L126">		assertEquals(CellStatus.EMPTY, game.getCellStatus(0, 1));</span>
+<span class="fc" id="L127">	}</span>
+	
+	@Test
+	public void testUndoWithoutTurn() throws FourInARowException {
+<span class="fc" id="L131">		game.resetGame();</span>
+<span class="fc" id="L132">		assertFalse(game.undo());</span>
+<span class="fc" id="L133">	}</span>
+	
+	@Test
+	public void testRedo() throws FourInARowException {
+<span class="fc" id="L137">		game.resetGame();</span>
+<span class="fc" id="L138">		game.takeTurn(0);</span>
+<span class="fc" id="L139">		game.takeTurn(0);</span>
+<span class="fc" id="L140">		game.takeTurn(0);</span>
+<span class="fc" id="L141">		game.undo();</span>
+<span class="fc" id="L142">		game.redo();</span>
+<span class="fc" id="L143">		assertEquals(CellStatus.PLAYER_ONE, game.getCellStatus(0, 2));</span>
+<span class="fc" id="L144">	}</span>
+	
+	@Test
+	public void testRedoWithoutUndo() throws FourInARowException {
+<span class="fc" id="L148">		game.resetGame();</span>
+<span class="fc" id="L149">		game.takeTurn(0);</span>
+<span class="fc" id="L150">		game.takeTurn(0);</span>
+<span class="fc" id="L151">		assertFalse(game.redo());</span>
+<span class="fc" id="L152">	}</span>
+	
+	@Test
+	public void testHorizonWin() throws FourInARowException {
+<span class="fc" id="L156">		game.resetGame();</span>
+<span class="fc" id="L157">		game.takeTurn(0);</span>
+<span class="fc" id="L158">		game.takeTurn(0);</span>
+<span class="fc" id="L159">		game.takeTurn(1);</span>
+<span class="fc" id="L160">		game.takeTurn(0);</span>
+<span class="fc" id="L161">		game.takeTurn(2);</span>
+<span class="fc" id="L162">		game.takeTurn(0);</span>
+<span class="fc" id="L163">		game.takeTurn(3);</span>
+<span class="fc" id="L164">		assertTrue(game.horizonWin(1, 0));</span>
+<span class="fc" id="L165">	}</span>
+	
+	@Test
+	public void testHorizonWinActualNotWon() throws FourInARowException {
+<span class="fc" id="L169">		game.resetGame();</span>
+<span class="fc" id="L170">		game.takeTurn(0);</span>
+<span class="fc" id="L171">		game.takeTurn(0);</span>
+<span class="fc" id="L172">		game.takeTurn(0);</span>
+<span class="fc" id="L173">		assertFalse(game.horizonWin(0, 1));</span>
+<span class="fc" id="L174">	}</span>
+	
+	@Test
+	public void testVerticalWin() throws FourInARowException {
+<span class="fc" id="L178">		game.resetGame();</span>
+<span class="fc" id="L179">		game.takeTurn(0);//</span>
+<span class="fc" id="L180">		game.takeTurn(0);</span>
+<span class="fc" id="L181">		game.takeTurn(0);//1</span>
+<span class="fc" id="L182">		game.takeTurn(1);</span>
+<span class="fc" id="L183">		game.takeTurn(0);//w2</span>
+<span class="fc" id="L184">		game.takeTurn(1);</span>
+<span class="fc" id="L185">		game.takeTurn(0);//3</span>
+<span class="fc" id="L186">		game.takeTurn(1);</span>
+<span class="fc" id="L187">		game.takeTurn(0);</span>
+<span class="fc" id="L188">		assertTrue(game.verticalWin(0, 2));</span>
+<span class="fc" id="L189">	}</span>
+	
+	@Test
+	public void testVerticalWinActualNotWon() throws FourInARowException {
+<span class="fc" id="L193">		game.resetGame();</span>
+<span class="fc" id="L194">		game.takeTurn(0);</span>
+<span class="fc" id="L195">		game.takeTurn(0);</span>
+<span class="fc" id="L196">		game.takeTurn(0);</span>
+<span class="fc" id="L197">		assertFalse(game.verticalWin(0, 1));</span>
+<span class="fc" id="L198">	}</span>
+	
+	@Test
+	public void testDiagonalWin1() throws FourInARowException {
+<span class="fc" id="L202">		game.resetGame();</span>
+<span class="fc" id="L203">		game.takeTurn(0);//</span>
+<span class="fc" id="L204">		game.takeTurn(1);</span>
+<span class="fc" id="L205">		game.takeTurn(1);//</span>
+<span class="fc" id="L206">		game.takeTurn(2);</span>
+<span class="fc" id="L207">		game.takeTurn(0);//</span>
+<span class="fc" id="L208">		game.takeTurn(2);</span>
+<span class="fc" id="L209">		game.takeTurn(2);//</span>
+<span class="fc" id="L210">		game.takeTurn(3);</span>
+<span class="fc" id="L211">		game.takeTurn(3);//</span>
+<span class="fc" id="L212">		game.takeTurn(3);</span>
+<span class="fc" id="L213">		game.takeTurn(3);</span>
+<span class="fc" id="L214">		assertTrue(game.diagonalWin1(2, 2));</span>
+<span class="fc" id="L215">	}</span>
+	
+	@Test
+	public void testDiagonalWin1ActualNotWon() throws FourInARowException {
+<span class="fc" id="L219">		game.resetGame();</span>
+<span class="fc" id="L220">		game.takeTurn(0);</span>
+<span class="fc" id="L221">		game.takeTurn(0);</span>
+<span class="fc" id="L222">		assertFalse(game.diagonalWin1(0, 1));</span>
+<span class="fc" id="L223">	} </span>
+	
+	@Test
+	public void testDiagonalWin2() throws FourInARowException {
+<span class="fc" id="L227">		game.resetGame();</span>
+<span class="fc" id="L228">		game.takeTurn(0);</span>
+<span class="fc" id="L229">		game.takeTurn(0);</span>
+<span class="fc" id="L230">		game.takeTurn(0);</span>
+<span class="fc" id="L231">		game.takeTurn(0);</span>
+<span class="fc" id="L232">		game.takeTurn(1);</span>
+<span class="fc" id="L233">		game.takeTurn(0);</span>
+<span class="fc" id="L234">		game.takeTurn(1);</span>
+<span class="fc" id="L235">		game.takeTurn(1);</span>
+<span class="fc" id="L236">		game.takeTurn(2);</span>
+<span class="fc" id="L237">		game.takeTurn(2);</span>
+<span class="fc" id="L238">		game.takeTurn(1);</span>
+<span class="fc" id="L239">		game.takeTurn(3);</span>
+<span class="fc" id="L240">		assertTrue(game.diagonalWin2(3, 0));</span>
+<span class="fc" id="L241">	}</span>
+	
+	@Test
+	public void testDiagonalWin2ActualNotWon() throws FourInARowException {
+<span class="fc" id="L245">		game.resetGame();</span>
+<span class="fc" id="L246">		game.takeTurn(0);</span>
+<span class="fc" id="L247">		game.takeTurn(0);</span>
+<span class="fc" id="L248">		assertFalse(game.diagonalWin2(0, 1));</span>
+<span class="fc" id="L249">	} </span>
+	
+	@Test
+	public void testHasWonWithoutTakeTurn() throws FourInARowException {
+<span class="fc" id="L253">		game.resetGame();</span>
+<span class="fc" id="L254">		game.hasWon();</span>
+<span class="fc" id="L255">	}</span>
+	
+	@Test
+	public void testHasWonHorizon() throws FourInARowException {
+<span class="fc" id="L259">		game.resetGame();</span>
+<span class="fc" id="L260">		game.takeTurn(0);</span>
+<span class="fc" id="L261">		game.takeTurn(0);</span>
+<span class="fc" id="L262">		game.takeTurn(1);</span>
+<span class="fc" id="L263">		game.takeTurn(0);</span>
+<span class="fc" id="L264">		game.takeTurn(2);</span>
+<span class="fc" id="L265">		game.takeTurn(0);</span>
+<span class="fc" id="L266">		game.takeTurn(3);</span>
+<span class="fc" id="L267">		assertTrue(game.hasWon());</span>
+<span class="fc" id="L268">	}</span>
+	
+	@Test
+	public void testHasVerticalWin() throws FourInARowException {
+<span class="fc" id="L272">		game.resetGame();</span>
+<span class="fc" id="L273">		game.takeTurn(0);//</span>
+<span class="fc" id="L274">		game.takeTurn(0);</span>
+<span class="fc" id="L275">		game.takeTurn(0);//1</span>
+<span class="fc" id="L276">		game.takeTurn(1);</span>
+<span class="fc" id="L277">		game.takeTurn(0);//w2</span>
+<span class="fc" id="L278">		game.takeTurn(1);</span>
+<span class="fc" id="L279">		game.takeTurn(0);//3</span>
+<span class="fc" id="L280">		game.takeTurn(1);</span>
+<span class="fc" id="L281">		game.takeTurn(0);</span>
+<span class="fc" id="L282">		assertTrue(game.hasWon());</span>
+<span class="fc" id="L283">	}</span>
+	
+	@Test
+	public void testHasDiagonalWin1() throws FourInARowException {
+<span class="fc" id="L287">		game.resetGame();</span>
+<span class="fc" id="L288">		game.takeTurn(0);//</span>
+<span class="fc" id="L289">		game.takeTurn(1);</span>
+<span class="fc" id="L290">		game.takeTurn(1);//</span>
+<span class="fc" id="L291">		game.takeTurn(2);</span>
+<span class="fc" id="L292">		game.takeTurn(0);//</span>
+<span class="fc" id="L293">		game.takeTurn(2);</span>
+<span class="fc" id="L294">		game.takeTurn(2);//</span>
+<span class="fc" id="L295">		game.takeTurn(3);</span>
+<span class="fc" id="L296">		game.takeTurn(3);//</span>
+<span class="fc" id="L297">		game.takeTurn(3);</span>
+<span class="fc" id="L298">		game.takeTurn(3);</span>
+<span class="fc" id="L299">		assertTrue(game.hasWon());</span>
+<span class="fc" id="L300">	}</span>
+	
+	@Test
+	public void testHasDiagonalWin2() throws FourInARowException {
+<span class="fc" id="L304">		game.resetGame();</span>
+<span class="fc" id="L305">		game.takeTurn(0);</span>
+<span class="fc" id="L306">		game.takeTurn(0);</span>
+<span class="fc" id="L307">		game.takeTurn(0);</span>
+<span class="fc" id="L308">		game.takeTurn(0);</span>
+<span class="fc" id="L309">		game.takeTurn(1);</span>
+<span class="fc" id="L310">		game.takeTurn(0);</span>
+<span class="fc" id="L311">		game.takeTurn(1);</span>
+<span class="fc" id="L312">		game.takeTurn(1);</span>
+<span class="fc" id="L313">		game.takeTurn(2);</span>
+<span class="fc" id="L314">		game.takeTurn(2);</span>
+<span class="fc" id="L315">		game.takeTurn(1);</span>
+<span class="fc" id="L316">		game.takeTurn(3);</span>
+<span class="fc" id="L317">		assertTrue(game.hasWon());</span>
+<span class="fc" id="L318">	}</span>
+	
+	@Test
+	public void testHasNotWon() throws FourInARowException {
+<span class="fc" id="L322">		game.resetGame();</span>
+<span class="fc" id="L323">		game.takeTurn(0);</span>
+<span class="fc" id="L324">		game.takeTurn(0);</span>
+<span class="fc" id="L325">		game.takeTurn(0);</span>
+<span class="fc" id="L326">		game.takeTurn(0);</span>
+<span class="fc" id="L327">		game.takeTurn(1);</span>
+<span class="fc" id="L328">		game.takeTurn(0);</span>
+<span class="fc" id="L329">		game.takeTurn(1);</span>
+<span class="fc" id="L330">		assertFalse(game.hasWon());</span>
+<span class="fc" id="L331">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.3.201901230119</span>GameExtraTest (2019年11月26日 下午7:14:14)</div></body></html>

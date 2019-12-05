@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../jacoco-resources/report.gif" type="image/gif"/><title>Game.java</title><link rel="stylesheet" href="../../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">GameExtraTest (2019年11月26日 下午7:14:14)</a> &gt; <a href="../../index.html" class="el_group">Four-in-a-Row-start-master</a> &gt; <a href="../index.html" class="el_bundle">src/main/java</a> &gt; <a href="index.source.html" class="el_package">software.testing.fourinarow</a> &gt; <span class="el_source">Game.java</span></div><h1>Game.java</h1><pre class="source lang-java linenums">package software.testing.fourinarow;
+
+import java.util.Stack;
+
+/**
+ * Represents the grid that holds the pieces that have been
+ * placed into each column.
+ */
+public class Game {
+
+    /** The maximum number of rows in the game grid */
+<span class="fc" id="L12">    public static int MAXIMUM_ROWS = 6;</span>
+
+    /** The maximum number of columns in the game grid */
+<span class="fc" id="L15">    public static int MAXIMUM_COLUMNS = 7;</span>
+
+    /** The game grid that holds information about the status of each cell */
+    private CellStatus[][] gameGrid;
+    
+    /** Record who take turn by turn%2 */
+<span class="fc" id="L21">    private int turn = 0;</span>
+    
+    /** Record last turn */
+<span class="fc" id="L24">    private Stack&lt;Integer&gt; toUndo = new Stack&lt;&gt;();</span>
+    
+    /** Record last undo */
+<span class="fc" id="L27">    private Stack&lt;Integer&gt; toRedo = new Stack&lt;&gt;();</span>
+    
+    /** Record last undo */
+<span class="fc" id="L30">    private Stack&lt;CellStatus&gt; statusToRedo = new Stack&lt;&gt;();</span>
+    
+    /**
+     * Creates a new instance, initialising the board with the
+     * Maximum values for columns and rows.
+     */
+<span class="fc" id="L36">    public Game() {</span>
+<span class="fc" id="L37">        gameGrid = new CellStatus[MAXIMUM_COLUMNS][MAXIMUM_ROWS];</span>
+<span class="fc" id="L38">    }</span>
+
+    /**
+     * Returns the number of cells in a column that have the status
+     * GridCellStatus.EMPTY.
+     *
+     * @param column The column to check. This is 0 indexed, so 0 represents column 1.
+     * @return A count of the number of empty cells.
+     * @throws FourInARowException if the column value is outside the range
+     * 0 to MAXIMUM_COLUMNS.
+     */
+    public int numberOfEmptyCellsInColumn(int column) throws FourInARowException {
+
+<span class="fc" id="L51">        int emptyCount = 0;</span>
+
+<span class="fc bfc" id="L53" title="All 2 branches covered.">        for(int row = 0; row &lt; MAXIMUM_ROWS; row++) {</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">            if(getCellStatus(column, row) == CellStatus.EMPTY) {</span>
+<span class="fc" id="L55">                emptyCount++;</span>
+            }
+        }
+
+<span class="fc" id="L59">        return emptyCount;</span>
+    }
+
+    /**
+     * Gets the GridCellStatus for a cell at the given grid position.
+     * @param row The number of the row, with 0 representing the first row.
+     * @param column The number of the column, with 0 representing the first column.
+     * @return The status value for the grid at the specified position.
+     * @throws FourInARowException if the row or column number is out of bounds for the
+     * number of rows and columns.
+     */
+    public CellStatus getCellStatus(int column, int row)
+           throws FourInARowException {
+
+<span class="fc bfc" id="L73" title="All 2 branches covered.">        if(row &lt; 0) {</span>
+<span class="fc" id="L74">            throw new FourInARowException(&quot;Row cannot be negative&quot;);</span>
+        }
+
+<span class="fc bfc" id="L77" title="All 2 branches covered.">        if(row &gt; MAXIMUM_ROWS - 1) {</span>
+<span class="fc" id="L78">            throw new FourInARowException(&quot;Row cannot be greater than the number of rows&quot;);</span>
+        }
+
+<span class="fc bfc" id="L81" title="All 2 branches covered.">        if(column &lt; 0) {</span>
+<span class="fc" id="L82">            throw new FourInARowException(&quot;Column cannot be negative&quot;);</span>
+        }
+
+<span class="fc bfc" id="L85" title="All 2 branches covered.">        if(column &gt; MAXIMUM_COLUMNS - 1) {</span>
+<span class="fc" id="L86">            throw new FourInARowException(&quot;Column cannot be greater than the number of columns&quot;);</span>
+        }
+
+<span class="fc" id="L89">        return gameGrid[column][row];</span>
+    }
+
+    /**
+     * Resets the board so that every position contains the value
+     * GridCellStatus.EMPTY.
+     *//*
+    public void reset() {
+        for(int column = 0; column &lt; MAXIMUM_COLUMNS; column++) {
+            for(int row = 0; row &lt; MAXIMUM_ROWS; row++) {
+                gameGrid[column][row] = CellStatus.EMPTY;
+            }
+        }
+
+    }*/
+    
+    public Player getActivePlayer() {
+<span class="fc bfc" id="L106" title="All 2 branches covered.">    	if(turn % 2 == 0) {</span>
+<span class="fc" id="L107">    		return Player.ONE;</span>
+    	}
+    	else {
+<span class="fc" id="L110">    		return Player.TWO;</span>
+    	}
+    }
+    
+    public Player getLastActivePlayer() {
+<span class="fc bfc" id="L115" title="All 2 branches covered.">    	if(turn % 2 != 0) {</span>
+<span class="fc" id="L116">    		return Player.ONE;</span>
+    	}
+    	else {
+<span class="fc" id="L119">    		return Player.TWO;</span>
+    	}
+    }
+    
+    public boolean takeTurn(int column) throws FourInARowException {
+<span class="fc" id="L124">    	int i = 0;</span>
+    	/*while(getCellStatus(column, i) != CellStatus.EMPTY) {
+    		if(i &lt; MAXIMUM_ROWS - 1) i++;
+    		else return false;
+    	}*/
+    	
+<span class="fc bfc" id="L130" title="All 2 branches covered.">    	if(numberOfEmptyCellsInColumn(column) != 0) i = MAXIMUM_ROWS - numberOfEmptyCellsInColumn(column);</span>
+<span class="fc" id="L131">    	else return false;</span>
+    	
+<span class="fc bfc" id="L133" title="All 2 branches covered.">    	if(turn % 2 == 0) {</span>
+<span class="fc" id="L134">    		gameGrid[column][i] = CellStatus.PLAYER_ONE;</span>
+<span class="fc" id="L135">    		turn++;</span>
+<span class="fc" id="L136">    		toUndo.push(column);</span>
+<span class="fc" id="L137">    		return true;</span>
+    	}
+<span class="pc bpc" id="L139" title="1 of 2 branches missed.">    	if(turn % 2 != 0) {</span>
+<span class="fc" id="L140">    		gameGrid[column][i] = CellStatus.PLAYER_TWO;</span>
+<span class="fc" id="L141">    		turn++;</span>
+<span class="fc" id="L142">    		toUndo.push(column);</span>
+<span class="fc" id="L143">    		return true;</span>
+    	}
+<span class="nc" id="L145">    	return false;</span>
+    }
+
+	public void resetGame() {
+<span class="fc bfc" id="L149" title="All 2 branches covered.">    	for(int i = 0; i &lt; MAXIMUM_COLUMNS; i++) {</span>
+<span class="fc bfc" id="L150" title="All 2 branches covered.">    		for(int j = 0; j &lt; MAXIMUM_ROWS; j++) {</span>
+<span class="fc" id="L151">    			gameGrid[i][j] = CellStatus.EMPTY;</span>
+    		}
+    	}
+<span class="fc" id="L154">    }</span>
+    
+    public boolean undo() throws FourInARowException {
+<span class="fc bfc" id="L157" title="All 2 branches covered.">    	if(toUndo.empty()) return false;</span>
+<span class="fc" id="L158">    	int undoColumn = toUndo.pop();</span>
+    	
+<span class="pc bpc" id="L160" title="1 of 2 branches missed.">    	for(int i = 0; i &lt; MAXIMUM_ROWS; i++) {</span>
+<span class="fc bfc" id="L161" title="All 2 branches covered.">    		if(getCellStatus(undoColumn, i) == CellStatus.EMPTY) {</span>
+<span class="fc" id="L162">    			statusToRedo.push(getCellStatus(undoColumn, i-1));</span>
+<span class="fc" id="L163">    			gameGrid[undoColumn][i - 1] = CellStatus.EMPTY;</span>
+<span class="fc" id="L164">    			toRedo.push(undoColumn);</span>
+<span class="fc" id="L165">    			turn--;</span>
+<span class="fc" id="L166">    			return true;</span>
+    		}
+    	}
+    	
+<span class="nc" id="L170">    	return false;</span>
+    }
+    
+    public boolean redo() throws FourInARowException {
+<span class="pc bpc" id="L174" title="1 of 4 branches missed.">    	if(statusToRedo.empty() || toRedo.empty()) return false;</span>
+<span class="fc" id="L175">    	int redoColumn = toRedo.pop();</span>
+<span class="fc" id="L176">    	CellStatus cs = statusToRedo.pop();</span>
+    	
+<span class="pc bpc" id="L178" title="1 of 2 branches missed.">    	for(int i = 0; i &lt; MAXIMUM_ROWS; i++) {</span>
+<span class="fc bfc" id="L179" title="All 2 branches covered.">    		if(getCellStatus(redoColumn, i) == CellStatus.EMPTY) {</span>
+<span class="fc" id="L180">    			gameGrid[redoColumn][i] = cs;</span>
+<span class="fc" id="L181">    			toUndo.push(redoColumn);</span>
+<span class="fc" id="L182">    			turn++;</span>
+<span class="fc" id="L183">    			return true;</span>
+    		} 
+    	}
+<span class="nc" id="L186">    	return false;</span>
+    } 
+    
+    public boolean horizonWin(int i, int j) throws FourInARowException {
+<span class="fc" id="L190">    	int left = i;</span>
+<span class="fc" id="L191">    	int right = i;</span>
+<span class="fc" id="L192">    	int count = 0;</span>
+    	
+<span class="pc bpc" id="L194" title="1 of 2 branches missed.">    	if(getCellStatus(i, j) != CellStatus.EMPTY) {</span>
+<span class="fc bfc" id="L195" title="All 4 branches covered.">    		while(left &gt;= 0 &amp;&amp; getCellStatus(left, j) == getCellStatus(i, j)) {</span>
+<span class="fc" id="L196">        		count++;</span>
+<span class="fc" id="L197">        		left--;</span>
+        	}
+        	
+<span class="pc bpc" id="L200" title="1 of 4 branches missed.">        	while(right &lt; MAXIMUM_ROWS - 1 &amp;&amp; getCellStatus(right, j) == getCellStatus(i, j)) {</span>
+<span class="fc" id="L201">        		count++;</span>
+<span class="fc" id="L202">        		right++;</span>
+        	}
+    	}
+<span class="fc bfc" id="L205" title="All 2 branches covered.">    	if(count &gt; 4) {</span>
+<span class="fc" id="L206">    		return true;</span>
+    	}
+<span class="fc" id="L208">    	return false;</span>
+    }
+	
+    public boolean verticalWin(int i, int j) throws FourInARowException{
+<span class="fc" id="L212">    	int up = j;</span>
+<span class="fc" id="L213">    	int down = j;</span>
+<span class="fc" id="L214">    	int count = 0;</span>
+    	
+<span class="pc bpc" id="L216" title="1 of 2 branches missed.">    	if(getCellStatus(i, j) != CellStatus.EMPTY) {</span>
+<span class="fc bfc" id="L217" title="All 4 branches covered.">    		while(down &gt;= 0 &amp;&amp; getCellStatus(i, down) == getCellStatus(i, j)) {</span>
+<span class="fc" id="L218">    			count++;</span>
+<span class="fc" id="L219">    			down--;</span>
+    		}
+<span class="fc bfc" id="L221" title="All 4 branches covered.">    		while(up &lt; MAXIMUM_COLUMNS - 1 &amp;&amp; getCellStatus(i, up) == getCellStatus(i, j)) {</span>
+<span class="fc" id="L222">        		count++;</span>
+<span class="fc" id="L223">        		up++;</span>
+        	}
+    	}
+    	
+<span class="fc bfc" id="L227" title="All 2 branches covered.">    	if(count &gt; 4) {</span>
+<span class="fc" id="L228">    		return true;</span>
+    	}
+<span class="fc" id="L230">    	return false;</span>
+    }
+    
+    public boolean diagonalWin1(int i, int j) throws FourInARowException {
+<span class="fc" id="L234">    	int up = j;</span>
+<span class="fc" id="L235">    	int right = i;</span>
+<span class="fc" id="L236">    	int down = j;</span>
+<span class="fc" id="L237">    	int left = i;</span>
+<span class="fc" id="L238">    	int count = 0;</span>
+    	
+<span class="pc bpc" id="L240" title="1 of 2 branches missed.">    	if(getCellStatus(i, j) != CellStatus.EMPTY) {</span>
+<span class="pc bpc" id="L241" title="1 of 6 branches missed.">    		while(left &gt;= 0 &amp;&amp; down &gt;= 0 &amp;&amp; getCellStatus(left, down) == getCellStatus(i, j)) {</span>
+<span class="fc" id="L242">    			count++;</span>
+<span class="fc" id="L243">    			left--;</span>
+<span class="fc" id="L244">    			down--;</span>
+    		}
+<span class="pc bpc" id="L246" title="2 of 6 branches missed.">    		while(right &lt; MAXIMUM_ROWS - 1 &amp;&amp; up &lt; MAXIMUM_COLUMNS &amp;&amp; getCellStatus(right, up) == getCellStatus(i, j)) {</span>
+<span class="fc" id="L247">    			count++;</span>
+<span class="fc" id="L248">    			right++;</span>
+<span class="fc" id="L249">    			up++;</span>
+    		}
+    	}
+<span class="fc bfc" id="L252" title="All 2 branches covered.">    	if(count &gt; 4) {</span>
+<span class="fc" id="L253">    		return true;</span>
+    	}
+<span class="fc" id="L255">    	return false;</span>
+    }
+    
+    public boolean diagonalWin2(int i, int j) throws FourInARowException {
+<span class="fc" id="L259">    	int up = j;</span>
+<span class="fc" id="L260">    	int right = i;</span>
+<span class="fc" id="L261">    	int down = j;</span>
+<span class="fc" id="L262">    	int left = i;</span>
+<span class="fc" id="L263">    	int count = 0;</span>
+    	
+<span class="pc bpc" id="L265" title="1 of 2 branches missed.">    	if(getCellStatus(i, j) != CellStatus.EMPTY) {</span>
+<span class="pc bpc" id="L266" title="2 of 6 branches missed.">    		while(left &gt;= 0 &amp;&amp; up &lt; MAXIMUM_COLUMNS &amp;&amp; getCellStatus(left, up) == getCellStatus(i, j)) {</span>
+<span class="fc" id="L267">    			count++;</span>
+<span class="fc" id="L268">    			left--;</span>
+<span class="fc" id="L269">    			up++;</span>
+    		}
+<span class="pc bpc" id="L271" title="1 of 6 branches missed.">    		while(right &lt; MAXIMUM_ROWS - 1 &amp;&amp; down &gt;= 0 &amp;&amp; getCellStatus(right, down) == getCellStatus(i, j)) {</span>
+<span class="fc" id="L272">    			count++;</span>
+<span class="fc" id="L273">    			right++;</span>
+<span class="fc" id="L274">    			down--;</span>
+    		}
+    	}
+<span class="fc bfc" id="L277" title="All 2 branches covered.">    	if(count &gt; 4) {</span>
+<span class="fc" id="L278">    		return true;</span>
+    	}
+<span class="fc" id="L280">    	return false;</span>
+    }
+    
+    public boolean hasWon() throws FourInARowException {
+<span class="fc bfc" id="L284" title="All 2 branches covered.">    	if(toUndo.empty()) return false;</span>
+<span class="fc" id="L285">    	int i = toUndo.peek();</span>
+<span class="fc" id="L286">    	int j = 0;</span>
+    	
+<span class="fc" id="L288">    	j = MAXIMUM_ROWS - numberOfEmptyCellsInColumn(i);</span>
+    	
+<span class="fc bfc" id="L290" title="All 2 branches covered.">    	if(horizonWin(i, j - 1)) return true;</span>
+<span class="fc bfc" id="L291" title="All 2 branches covered.">    	if(verticalWin(i, j - 1)) return true;</span>
+<span class="fc bfc" id="L292" title="All 2 branches covered.">    	if(diagonalWin1(i, j - 1)) return true;</span>
+<span class="fc bfc" id="L293" title="All 2 branches covered.">    	if(diagonalWin2(i, j - 1)) return true;</span>
+    	
+<span class="fc" id="L295">    	return false;</span>
+    }
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.3.201901230119</span>GameExtraTest (2019年11月26日 下午7:14:14)</div></body></html>
